@@ -6,38 +6,58 @@ let homeBtn = document.getElementById("home");
 let aboutBtn = document.getElementById("about");
 let divCard;
 let arr = [];
+let arrCards = [];
 let li;
 let searchInput = document.getElementById("searchInput");
 let searchBtn = document.getElementById("searchBtn");
 
-
-// searchBtn.addEventListener("click" , search)
-homeBtn.addEventListener("click" , home);
-aboutBtn.addEventListener("click" , about)
+searchBtn.addEventListener("click", search)
+homeBtn.addEventListener("click", home);
+aboutBtn.addEventListener("click", about)
 
 getCoine()
 
-// function search(){
-//     // divMain.style.display = "none";
-//     let card = document.querySelector(".card");
-//     card.style.display = "none"
-//     divOfSearch = document.querySelector(`#${searchInput.value}`).parentElement;
-//     console.log(divOfSearch);
-//     divOfSearch.style.display = "flex";
-// }
+function search() {
+    let find = arrCards.find(card => card == searchInput.value);
+    console.log(find)
+    if (!find) {
+
+        alert("error")
+    } else {
+        let divOfSearch = document.querySelector(`#${searchInput.value}`).parentElement;
+        let card = document.querySelectorAll(".card");
+        for (let i = 0; i < card.length; i++) {
+            card[i].style.display = "none"
+        }
+
+        divOfSearch.style.display = "block"
+    }
+}
 
 
-function home(){
-    divMain.style.display = "flex"
+function home() {
+
+    let card = document.querySelectorAll(".card");
+    for (let i = 0; i < card.length; i++) {
+        card[i].style.display = "block"
+    }
+
     divAbout.style.display = "none"
 }
 
-function about(){
-    divMain.style.display = "none"
+function about() {
+
+    let card = document.querySelectorAll(".card");
+    for (let i = 0; i < card.length; i++) {
+        card[i].style.display = "none"
+    }
     //לכתוב כמה מילים על הפרוייקט
     divAbout = document.createElement("div");
-    divAbout.innerHTML = "שלום רב זהו הפרוייקט שלי נעים מאוד";
     document.body.appendChild(divAbout)
+    let h2 = document.createElement("h2");
+    h2.innerHTML = "ortal dayan";
+
+    divAbout.appendChild(h2)
 }
 
 
@@ -49,13 +69,15 @@ function getCoine() {
         .then(res => res.json())
         .then(function (data) {
             for (let i = 0; i < 20; i++) {
+                arrCards.push(data[i].symbol)
+                console.log(arrCards);
                 divCard = document.createElement("div")
                 divCard.setAttribute("class", "card")
                 divMain.appendChild(divCard);
 
                 let h2Symbol = document.createElement("h2")
                 h2Symbol.innerHTML = data[i].symbol;
-                h2Symbol.setAttribute("id" , data[i].symbol)
+                h2Symbol.setAttribute("id", data[i].symbol)
                 divCard.appendChild(h2Symbol);
 
                 let pName = document.createElement("p")
@@ -74,8 +96,8 @@ function getCoine() {
 
                 let moreInfoBtn = document.createElement("button");
                 moreInfoBtn.innerHTML = "more info";
-                moreInfoBtn.setAttribute("class" , "moreInfo btn btn-outline-secondary");
-                moreInfoBtn.setAttribute("type" , "button")
+                moreInfoBtn.setAttribute("class", "moreInfo btn btn-outline-secondary");
+                moreInfoBtn.setAttribute("type", "button")
                 divCard.appendChild(moreInfoBtn)
 
                 moreInfoBtn.addEventListener("click", onClickMoreInfo);
@@ -127,7 +149,7 @@ function createModal(checkboxInputClass) {
     closeBtn.onclick = function (checkbox) {
         wraperModal.remove();
         console.log(checkboxInputClass)
-        
+
         let checkboxOpenModal = document.querySelector(`.${checkboxInputClass}`)
         console.log(checkboxOpenModal)
         checkboxOpenModal.checked = true;
@@ -135,7 +157,7 @@ function createModal(checkboxInputClass) {
         console.log(arr);
     }
 
-    
+
 
     for (let i = 0; i < arr.length; i++) {
         li = document.createElement("li");
@@ -153,19 +175,19 @@ function createModal(checkboxInputClass) {
 }
 
 function updateCheckbox(event) {
-   
-        console.log("works")
-        let checkboxInDoc = document.querySelector(`.${event.target.id}`)
-        checkboxInDoc.checked = false;
 
-        const index = arr.findIndex(coin => coin === checkboxInDoc.parentElement.querySelector("h2").innerHTML);
-        arr.splice(index, 1);
-        console.log(arr);
+    console.log("works")
+    let checkboxInDoc = document.querySelector(`.${event.target.id}`)
+    checkboxInDoc.checked = false;
 
-        let elementRemove = document.querySelector(".divModal");
-        let ilRemove = elementRemove.querySelector(`#${event.target.id}`).parentElement;
-        ilRemove.remove();
-    
+    const index = arr.findIndex(coin => coin === checkboxInDoc.parentElement.querySelector("h2").innerHTML);
+    arr.splice(index, 1);
+    console.log(arr);
+
+    let elementRemove = document.querySelector(".divModal");
+    let ilRemove = elementRemove.querySelector(`#${event.target.id}`).parentElement;
+    ilRemove.remove();
+
 }
 
 
