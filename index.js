@@ -51,19 +51,30 @@ function about() {
     for (let i = 0; i < card.length; i++) {
         card[i].style.display = "none"
     }
-    //לכתוב כמה מילים על הפרוייקט
+    
     divAbout = document.createElement("div");
     document.body.appendChild(divAbout)
+    divAbout.setAttribute("class" , "divAbout");
     let h2 = document.createElement("h2");
     h2.innerHTML = "ortal dayan";
-
     divAbout.appendChild(h2)
+    let p1 = document.createElement("p");
+    p1.innerHTML = "This project presents virtual currencies, you can select only five currencies, and you also have a search box to search for a specific currency.";
+    divAbout.appendChild(p1);
+    let p2 = document.createElement("p");
+    p2.innerHTML = "Each tab has a button for more information where you can see the price of the currencies in dollars, shekels and euros.";
+    divAbout.appendChild(p2);
+    let img = document.createElement("img");
+    img.src = "img/dolarImogi.jpg";
+    divAbout.appendChild(img);
+
 }
 
 
 function getCoine() {
     let gif = document.createElement("img");
     gif.src = "img/mony.gif"
+    gif.setAttribute("class", "gifDoc")
     document.body.appendChild(gif)
     fetch("https://api.coingecko.com/api/v3/coins")
         .then(res => res.json())
@@ -125,6 +136,13 @@ function toggleBtnCheck(event) {
         arr.splice(index, 1);
         console.log(arr);
 
+
+        // if(!arr.length){
+
+        //     wraperModal = document.querySelector(".wraperModal")
+        //     wraperModal.remove();
+        // }
+
     }
 }
 
@@ -138,6 +156,10 @@ function createModal(checkboxInputClass) {
     divModal.setAttribute("class", "divModal")
     wraperModal.appendChild(divModal);
 
+    let h2Modal = document.createElement("h4");
+    h2Modal.innerHTML = "chose coin to remove:"
+    divModal.appendChild(h2Modal);
+
     let ul = document.createElement("ul")
     divModal.appendChild(ul);
 
@@ -146,18 +168,17 @@ function createModal(checkboxInputClass) {
     closeBtn.setAttribute("class", "close");
     divModal.appendChild(closeBtn)
 
-    closeBtn.onclick = function (checkbox) {
+    closeBtn.onclick = function () {
         wraperModal.remove();
         console.log(checkboxInputClass)
 
         let checkboxOpenModal = document.querySelector(`.${checkboxInputClass}`)
-        console.log(checkboxOpenModal)
-        checkboxOpenModal.checked = true;
-        arr.push(checkboxOpenModal.parentElement.querySelector("h2").innerHTML)
+        if (arr.length < 5) {
+            checkboxOpenModal.checked = true;
+            arr.push(checkboxOpenModal.parentElement.querySelector("h2").innerHTML)
+        }
         console.log(arr);
     }
-
-
 
     for (let i = 0; i < arr.length; i++) {
         li = document.createElement("li");
@@ -167,6 +188,7 @@ function createModal(checkboxInputClass) {
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("checked", "true");
         checkbox.setAttribute("id", arr[i]);
+        checkbox.setAttribute("class", "inputModal");
         li.appendChild(checkbox)
         checkbox.addEventListener("click", updateCheckbox)
 
@@ -212,7 +234,7 @@ async function getDateFromApi(coinId, event) {
 
     const gif = document.createElement("img");
     gif.src = "img/mony.gif";
-    gif.style.width = "180px"
+    gif.setAttribute("class", "moreInfoGif")
     event.target.parentElement.appendChild(gif);
 
     const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`);
